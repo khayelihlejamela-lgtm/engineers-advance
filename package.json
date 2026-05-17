@@ -1,0 +1,29 @@
+{
+  "name": "engineers-advance",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint"
+  },
+  "dependencies": {
+    "@heroicons/react": "^2.2.0",
+    "@supabase/supabase-js": "^2.98.0",
+    "framer-motion": "^12.38.0",
+    "next": "^16.2.5",
+    "react": "19.2.3",
+    "react-dom": "19.2.3",
+    "resend": "^6.1.3"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4.2.4",
+    "@types/react": "19.2.14",
+    "autoprefixer": "^10.5.0",
+    "eslint": "^9",
+    "eslint-config-next": "16.1.6",
+    "postcss": "^8.5.14",
+    "tailwindcss": "^4.2.4"
+  }
+}
