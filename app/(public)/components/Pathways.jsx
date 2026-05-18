@@ -41,9 +41,16 @@ export default function Pathways() {
 
       <div className="w mx-auto px-6 flex flex-wrap justify-center grid grid-cols-1 md:grid-cols-3 gap-12">
         {pathways.map((p) => (
-          <div
+          <Link
             key={p.slug}
-            className="p-2 flex-grow border-[var(--brand-secondary)] rounded-lg shadow-sm hover:shadow-[6px_6px_12px_rgba(0,0,0,0.18)] hover:-translate-y-1 transition-all duration-300 flex flex-col"
+            href={`/pathways/${p.slug}`}
+            className="
+              p-2 flex-grow border-[var(--brand-secondary)] rounded-lg shadow-sm
+              hover:shadow-[6px_6px_12px_rgba(0,0,0,0.18)] hover:-translate-y-1
+              active:scale-[0.98]
+              transition-all duration-300 flex flex-col
+              touch-manipulation
+            "
           >
             <Image
               src={p.image}
@@ -56,19 +63,18 @@ export default function Pathways() {
 
             <div className="mb-4">{p.icon}</div>
 
-            <h3 className="text-xl text-[var(--brand-primary)] font-semibold mb-3">{p.title}</h3>
+            <h3 className="text-xl text-[var(--brand-primary)] font-semibold mb-3">
+              {p.title}
+            </h3>
 
             <p className="text-gray-600 flex-grow leading-relaxed">
               {p.description}
             </p>
 
-            <Link
-              href={`/pathways/${p.slug}`}
-              className="text-[var(--brand-secondary)] font-medium mt-4 inline-block hover:underline"
-            >
+            <span className="text-[var(--brand-secondary)] font-medium mt-4 inline-block underline-offset-2 hover:underline">
               Read more →
-            </Link>
-          </div>
+            </span>
+          </Link>
         ))}
       </div>
       {/* Fade from white (pathways) to gray (why us) */}

@@ -6,7 +6,11 @@ export default function Footer() {
       <img
         src="/logo1.png"
         alt="Engineers Advance Logo"
-        className="h-10 w-auto mx-auto"
+        href="/"
+        className="h-10 w-auto mx-auto 
+            transition-all duration-200
+            active:scale-95
+            touch-manipulation"
       />
 
       {/* Email */}
@@ -14,7 +18,7 @@ export default function Footer() {
         Contact Us:{" "}
         <a
           href="mailto:info@engineersadvance.com"
-          className="hover:text-[var(--brand-secondary)] transition hover:underline"
+          className="footer-link"
         >
           info@engineersadvance.com
         </a>
@@ -24,7 +28,7 @@ export default function Footer() {
       <p className="text-sm pt-1">
         <a
           href="/partner"
-          className="hover:underline hover:text-[var(--brand-secondary)] font-medium"
+          className="footer-link"
         >
           Partner With Us
         </a>

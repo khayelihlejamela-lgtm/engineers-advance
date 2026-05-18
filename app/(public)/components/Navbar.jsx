@@ -10,18 +10,18 @@ export default function Navbar({ partnerMode = false }) {
   const homeLinks = (
   <>
     <a 
-    className="hover:text-[var(--brand-secondary)]" href="/#about">About</a>
-    <a className="hover:text-[var(--brand-secondary)]" href="/#pathways">Pathways</a>
-    <a className="hover:text-[var(--brand-secondary)]" href="/#how-it-works">How It Works</a>
-    <a className="hover:text-[var(--brand-secondary)]" href="/partner">For Partners</a>
+    className="nav-link" href="/#about">About</a>
+    <a className="nav-link" href="/#pathways">Pathways</a>
+    <a className="nav-link" href="/#how-it-works">How It Works</a>
+    <a className="nav-link" href="/partner">For Partners</a>
   </>
 );
 
 const partnerLinks = (
   <>
-    <a className="hover:text-[var(--brand-secondary)]" href="/">Home</a>
-    <a className="hover:text-[var(--brand-secondary)]" href="/partner#why-us">Why Us</a>
-    <a className="hover:text-[var(--brand-secondary)]" href="/partner#partnership-opportunities">Opportunities</a>
+    <a className="nav-link" href="/">Home</a>
+    <a className="nav-link" href="/partner#why-us">Why Us</a>
+    <a className="nav-link" href="/partner#partnership-opportunities">Opportunities</a>
   </>
 );
 
@@ -36,14 +36,22 @@ const partnerLinks = (
       <div className="w-full mx-auto h-full flex items-center justify-between px-6">
 
         {/* Logo */}
-        <a href="/" className="flex items-center">
+        <a
+          href="/"
+          className="
+            flex items-center
+            transition-all duration-200
+            active:scale-95
+            touch-manipulation
+          "
+        >
           <div className="h-full flex items-center">
             <Image
               src="/newlogo.png"
               alt="Engineers Advance Logo"
               width={150}
               height={150}
-              className="h-full w-auto object-contain transition-all duration-300"
+              className="h-full w-auto object-contain select-none"
               loading="eager"
             />
           </div>
@@ -61,7 +69,14 @@ const partnerLinks = (
                 onClick={() =>
                   document.getElementById("partner-form")?.scrollIntoView({ behavior: "smooth" })
                 }
-                className="bg-[var(--brand-secondary)] text-white px-4 py-2 rounded-md hover:bg-[var(--brand-primary)]"
+                className="px-6 py-3 
+                  bg-[var(--brand-secondary)] text-white 
+                  rounded-lg 
+                  transition-all duration-300 
+                  hover:bg-[var(--brand-primary)]
+                  active:scale-95 active:bg-[var(--brand-primary)]
+                  focus:ring-2 focus:ring-[var(--brand-secondary)] focus:ring-offset-2
+                  touch-manipulation"
               >
                 Partner With Us
               </button>
@@ -70,7 +85,14 @@ const partnerLinks = (
                 onClick={() =>
                   document.getElementById("cta")?.scrollIntoView({ behavior: "smooth" })
                 }
-                className="bg-[var(--brand-secondary)] text-white px-4 py-2 rounded-md hover:bg-[var(--brand-primary)]"
+                className="px-6 py-3 
+                  bg-[var(--brand-secondary)] text-white 
+                  rounded-lg 
+                  transition-all duration-300 
+                  hover:bg-[var(--brand-primary)]
+                  active:scale-95 active:bg-[var(--brand-primary)]
+                  focus:ring-2 focus:ring-[var(--brand-secondary)] focus:ring-offset-2
+                  touch-manipulation"
               >
                 Get Started
               </button>

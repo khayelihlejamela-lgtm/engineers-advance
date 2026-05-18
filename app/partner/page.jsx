@@ -114,7 +114,14 @@ export default function PartnerPage() {
           onClick={() =>
             document.getElementById("partner-form").scrollIntoView({ behavior: "smooth" })
           }
-          className="mt-8 bg-[var(--brand-secondary)] text-white px-8 py-3 rounded-md hover:bg-[var(--brand-primary)] transition-all duration-300"
+          className="mt-8 px-6 py-3 
+            bg-[var(--brand-secondary)] text-white 
+            rounded-lg 
+            transition-all duration-300 
+            hover:bg-[var(--brand-primary)]
+            active:scale-95 active:bg-[var(--brand-primary)]
+            focus:ring-2 focus:ring-[var(--brand-secondary)] focus:ring-offset-2
+            touch-manipulation"
         >
           Become a Partner
         </button>
@@ -525,10 +532,18 @@ export default function PartnerPage() {
                 type="submit"
                 disabled={loading}
                 className={`
-                  py-3 rounded-md font-semibold transition-all duration-300
-                  ${loading ? "opacity-60 cursor-not-allowed" : "hover:bg-[var(--brand-primary)]"}
-                  ${hasErrors ? "border-2 border-red-500 bg-white text-red-600" : "bg-[var(--brand-secondary)] text-white"}
-                `}
+                    py-3 rounded-md font-semibold transition-all duration-300
+                    touch-manipulation
+
+                    ${loading 
+                      ? "opacity-60 cursor-not-allowed" 
+                      : "hover:bg-[var(--brand-primary)] active:scale-95 active:bg-[var(--brand-primary)]"
+                    }
+
+                    ${hasErrors 
+                      ? "border-2 border-red-500 bg-white text-red-600 animate-[shake_0.2s_ease-in-out]" 
+                      : "bg-[var(--brand-secondary)] text-white"
+                    }`}
               >
                 {loading ? "Submitting..." : "Become a Partner"}
               </button>
@@ -551,7 +566,7 @@ export default function PartnerPage() {
           For direct enquiries:{" "}
           <a
             href="mailto:partners@engineersadvance.com"
-            className="hover:underline hover:text-[var(--brand-secondary)]"
+            className="footer-link"
           >
             partners@engineersadvance.com
           </a>
@@ -561,7 +576,7 @@ export default function PartnerPage() {
       <p className="text-sm pt-1">
         <a
           href="/"
-          className="hover:underline hover:text-[var(--brand-secondary)] font-medium"
+          className="footer-link"
         >
           Home
         </a>

@@ -230,9 +230,17 @@ export default function CTASection() {
             disabled={loading}
             className={`
                 py-3 rounded-md font-semibold transition-all duration-300
-                ${loading ? "opacity-60 cursor-not-allowed" : "hover:bg-[var(--brand-primary)]"}
-                ${hasErrors ? "border-2 border-red-500 bg-white text-red-600" : "bg-[var(--brand-secondary)] text-white animate-[shake_0.2s_ease-in-out]"}
-"}
+                touch-manipulation
+
+                ${loading 
+                  ? "opacity-60 cursor-not-allowed" 
+                  : "hover:bg-[var(--brand-primary)] active:scale-95 active:bg-[var(--brand-primary)]"
+                }
+
+                ${hasErrors 
+                  ? "border-2 border-red-500 bg-white text-red-600 animate-[shake_0.2s_ease-in-out]" 
+                  : "bg-[var(--brand-secondary)] text-white"
+                }
               `}
             >
               {loading ? "Submitting..." : "Register Your Interest"}

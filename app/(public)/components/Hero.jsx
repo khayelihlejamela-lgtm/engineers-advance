@@ -22,16 +22,32 @@ export default function Hero() {
             onClick={() =>
                   document.getElementById("cta")?.scrollIntoView({ behavior: "smooth" })
                 }
-            className="px-6 py-3 bg-[var(--brand-secondary)] text-white rounded-lg transition-all duration-300 
-                      hover:bg-[var(--brand-primary)]"
+            className="px-6 py-3 
+              bg-[var(--brand-secondary)] text-white 
+              rounded-lg 
+              transition-all duration-300 
+              hover:bg-[var(--brand-primary)]
+              active:scale-95 active:bg-[var(--brand-primary)]
+              focus:ring-2 focus:ring-[var(--brand-secondary)] focus:ring-offset-2
+              touch-manipulation"
           >
             Candidate Sign Up
           </button>
 
           <a
             href="/partner"
-            className="border border-[var(--brand-secondary)] text-[var(--brand-primary)] px-6 py-3 rounded-md 
-                      hover:bg-[var(--brand-primary)] hover:text-white transition-all duration-300"
+            className="border border-[var(--brand-secondary)] 
+            text-[var(--brand-primary)] 
+            px-6 py-3 rounded-md 
+            transition-all duration-300 
+            hover:bg-[var(--brand-primary)] hover:text-white
+
+            active:scale-95 
+            active:bg-[var(--brand-primary)] 
+            active:text-white
+
+            focus:ring-2 focus:ring-[var(--brand-secondary)] focus:ring-offset-2
+            touch-manipulation"
           >
             Partner With Us
           </a>
