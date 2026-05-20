@@ -1,7 +1,5 @@
 import "./globals.css";
 import Navbar from "./(public)/components/Navbar";
-import DesktopModeLoader from "./(public)/components/DesktopModeLoader";
-
 
 export default function RootLayout({ children }) {
   return (
@@ -14,9 +12,8 @@ export default function RootLayout({ children }) {
         <link rel="icon" type="image/png" href="/favicon1.png" />
       </head>
       <body>
-        <Navbar />
-        <DesktopModeLoader />
-        {children}
+          <Navbar />
+          {children}
       </body>
     </html>
   );

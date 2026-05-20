@@ -1,5 +1,3 @@
-import MobileDesktopToggle from "./MobileDesktopToggle";
-
 export default function Footer() {
   return (
     <footer className="pt-2 pb-2 px-6 bg-gray-900 text-gray-300 text-center">
@@ -35,9 +33,6 @@ export default function Footer() {
           Partner With Us
         </a>
       </p>
-
-      {/* Mobile/Desktop Toggle */}
-      <MobileDesktopToggle />
 
       {/* Copyright */}
       <p className="text-xs mt-2 text-gray-200/70">

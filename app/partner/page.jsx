@@ -3,7 +3,6 @@
 import Link from "next/link";
 import { useState, useRef, useEffect } from "react";
 import Image from "next/image";
-import MobileDesktopToggle from "../(public)/components/MobileDesktopToggle";
 import Navbar from "../(public)/components/Navbar";   // <-- import your navbar
 import {
   BuildingOfficeIcon,
@@ -693,9 +692,6 @@ export default function PartnerPage() {
           Home
         </a>
       </p>
-
-        {/* Mobile/Desktop Toggle */}
-        <MobileDesktopToggle />
 
         {/* Copyright */}
         <p className="text-xs mt-2 text-gray-200/70">

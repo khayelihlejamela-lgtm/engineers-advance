@@ -1,39 +1,6 @@
 @import "tailwindcss";
 @tailwind utilities;
 
-@layer utilities {
-  /* Layout containers */
-  .force-desktop .md\:container,
-  .force-desktop .lg\:container {
-    max-width: 1024px !important;
-  }
-
-  /* Flex/grid visibility */
-  .force-desktop .md\:flex { display: flex !important; }
-  .force-desktop .md\:grid { display: grid !important; }
-  .force-desktop .md\:block { display: block !important; }
-  .force-desktop .md\:inline-block { display: inline-block !important; }
-
-  .force-desktop .md\:hidden { display: none !important; }
-
-  /* Typography scaling */
-  .force-desktop .md\:text-lg { font-size: 1.125rem !important; }
-  .force-desktop .md\:text-xl { font-size: 1.25rem !important; }
-  .force-desktop .md\:text-2xl { font-size: 1.5rem !important; }
-
-  /* Grid columns */
-  .force-desktop .md\:grid-cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; }
-  .force-desktop .md\:grid-cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)) !important; }
-  .force-desktop .md\:grid-cols-4 { grid-template-columns: repeat(4, minmax(0, 1fr)) !important; }
-
-  /* Spacing */
-  .force-desktop .md\:p-8 { padding: 2rem !important; }
-  .force-desktop .md\:py-12 { padding-top: 3rem !important; padding-bottom: 3rem !important; }
-  .force-desktop .md\:gap-8 { gap: 2rem !important; }
-}
-
-
-
 :root {
   --navbar-height: 80px;
   --background: #ffffff;
@@ -108,21 +75,13 @@ html {
   }
 }
 
-/* Force desktop layout when desktop-mode is active */
-.desktop-mode .md\:hidden {
-  display: none !important;
+.force-desktop {
+  width: 1280px; /* desktop width */
+  transform: scale(calc(100vw / 1280));
+  transform-origin: top left;
 }
 
-.desktop-mode .md\:block,
-.desktop-mode .md\:flex,
-.desktop-mode .md\:grid {
+
+.force-desktop\:block {
   display: block !important;
-}
-
-.desktop-mode .md\:flex {
-  display: flex !important;
-}
-
-.desktop-mode .md\:grid {
-  display: grid !important;
 }
