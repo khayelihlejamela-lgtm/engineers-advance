@@ -108,17 +108,21 @@ html {
   }
 }
 
-html.force-desktop body {
-  transition: all 0.35s ease;
-  transform: scale(0.92);
-  transform-origin: top center;
-  opacity: 0.98;
+/* Force desktop layout when desktop-mode is active */
+.desktop-mode .md\:hidden {
+  display: none !important;
 }
 
-html.force-desktop {
-  background: var(--background);
+.desktop-mode .md\:block,
+.desktop-mode .md\:flex,
+.desktop-mode .md\:grid {
+  display: block !important;
 }
 
-html.force-desktop body {
-  backdrop-filter: blur(1px);
+.desktop-mode .md\:flex {
+  display: flex !important;
+}
+
+.desktop-mode .md\:grid {
+  display: grid !important;
 }

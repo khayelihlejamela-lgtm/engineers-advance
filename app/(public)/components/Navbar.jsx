@@ -71,7 +71,7 @@ const partnerLinks = (
                 }
                 className="px-6 py-3 
                   bg-[var(--brand-secondary)] text-white 
-                  rounded-lg 
+                  rounded-lg hover:cursor-pointer
                   transition-all duration-300 
                   hover:bg-[var(--brand-primary)]
                   active:scale-95 active:bg-[var(--brand-primary)]
@@ -87,7 +87,7 @@ const partnerLinks = (
                 }
                 className="px-6 py-3 
                   bg-[var(--brand-secondary)] text-white 
-                  rounded-lg 
+                  rounded-lg hover:cursor-pointer
                   transition-all duration-300 
                   hover:bg-[var(--brand-primary)]
                   active:scale-95 active:bg-[var(--brand-primary)]

@@ -8,6 +8,13 @@ export default function CTASection() {
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
 
+  const [otpSent, setOtpSent] = useState(false);
+  const [otp, setOtp] = useState("");
+  const [otpVerified, setOtpVerified] = useState(false);
+  const [otpLoading, setOtpLoading] = useState(false);
+  const [otpVerifying, setOtpVerifying] = useState(false);
+
+
   const hasErrors = Object.keys(errors).length > 0;
 
   const fullNameRef = useRef(null);
@@ -16,23 +23,23 @@ export default function CTASection() {
   const pathwayRef = useRef(null);
 
   const scrollToFirstError = (errors) => {
-  if (errors.fullName && fullNameRef.current) {
-    fullNameRef.current.scrollIntoView({ behavior: "smooth", block: "center" });
-    return;
-  }
-  if (errors.email && emailRef.current) {
-    emailRef.current.scrollIntoView({ behavior: "smooth", block: "center" });
-    return;
-  }
-  if (errors.phone && phoneRef.current) {
-    phoneRef.current.scrollIntoView({ behavior: "smooth", block: "center" });
-    return;
-  }
-  if (errors.pathway && pathwayRef.current) {
-    pathwayRef.current.scrollIntoView({ behavior: "smooth", block: "center" });
-    return;
-  }
+  const scroll = (ref) => {
+    if (!ref?.current) return;
+    ref.current.scrollIntoView({ behavior: "smooth", block: "center" });
+    setTimeout(() => window.scrollBy(0, -120), 200); // adjust for navbar
+  };
+
+  if (errors.fullName) return scroll(fullNameRef);
+  if (errors.email) return scroll(emailRef);
+  if (errors.phone) return scroll(phoneRef);
+  if (errors.pathway) return scroll(pathwayRef);
 };
+
+  useEffect(() => {
+    if (Object.keys(errors).length > 0) {
+      scrollToFirstError(errors);
+    }
+  }, [errors]);
 
 
   useEffect(() => {
@@ -41,8 +48,57 @@ export default function CTASection() {
 
   if (!mounted) return null;
 
+  const sendOtp = async () => {
+  if (!emailRef.current.value.trim()) {
+    setErrors({ email: "Email is required" });
+    return;
+  }
+
+  setOtpLoading(true);
+
+  const res = await fetch("/api/otp/send", {
+    method: "POST",
+    body: JSON.stringify({ email: emailRef.current.value.trim() }),
+  });
+
+  setOtpLoading(false);
+
+  if (res.ok) {
+    setOtpSent(true);
+  }
+};
+
+  const verifyOtp = async () => {
+    setOtpVerifying(true);
+
+    const res = await fetch("/api/otp/verify", {
+      method: "POST",
+      body: JSON.stringify({
+        email: emailRef.current.value.trim(),
+        code: otp,
+      }),
+    });
+
+    const data = await res.json();
+    setOtpVerifying(false);
+
+    if (data.verified) {
+      setOtpVerified(true);
+    } else {
+      setErrors({ email: "Invalid or expired code" });
+    }
+  };
+
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if (!otpVerified) {
+    setErrors({ email: "Please verify your email first" });
+    scrollToFirstError({ email: true });
+    return;
+  }
+
 
     const form = e.target;
     const fullName = form.fullName.value.trim();
@@ -142,20 +198,60 @@ export default function CTASection() {
             <label className="block mb-2 font-semibold text-gray-800">
               Email Address
             </label>
+
             <input
               ref={emailRef}
               name="email"
               type="email"
               className={`w-full p-3 rounded-md border ${
-                errors.email
-                  ? "border-red-500"
-                  : "border-[var(--brand-secondary)]/40"
+                errors.email ? "border-red-500" : "border-[var(--brand-secondary)]/40"
               } bg-white text-gray-800 
               focus:outline-none focus:ring-2 focus:ring-[var(--brand-secondary)] 
               transition-all duration-300`}
             />
+
             {errors.email && (
               <p className="text-red-500 text-sm mt-1">{errors.email}</p>
+            )}
+
+            {/* Send OTP button */}
+            {!otpSent && (
+              <button
+                type="button"
+                onClick={sendOtp}
+                className="mt-3 px-4 py-2 bg-[var(--brand-secondary)] text-white rounded-md font-semibold transition-all duration-300 hover:cursor-pointer hover:bg-[var(--brand-primary)] active:scale-95"
+              >
+                {otpLoading ? "Sending..." : "Send Verification Code"}
+              </button>
+            )}
+
+            {/* OTP Input */}
+            {otpSent && !otpVerified && (
+              <div className="mt-4">
+                <input
+                  type="text"
+                  maxLength={6}
+                  value={otp}
+                  onChange={(e) => setOtp(e.target.value)}
+                  className="w-full p-3 rounded-md border border-[var(--brand-secondary)]/40 text-center tracking-widest text-lg focus:outline-none focus:ring-2 focus:ring-[var(--brand-secondary)] transition-all duration-300"
+                  placeholder="Enter 6‑digit code"
+                />
+
+                <button
+                  type="button"
+                  onClick={verifyOtp}
+                  className="mt-3 px-4 py-2 bg-[var(--brand-secondary)] text-white rounded-md hover:cursor-pointer font-semibold transition-all duration-300 hover:bg-[var(--brand-primary)] active:scale-95"
+                >
+                  {otpVerifying ? "Verifying..." : "Verify Code"}
+                </button>
+              </div>
+            )}
+
+            {/* Verified */}
+            {otpVerified && (
+              <p className="text-green-600 font-semibold mt-2">
+                Email verified ✓
+              </p>
             )}
           </div>
 
@@ -227,10 +323,12 @@ export default function CTASection() {
           {/* Submit */}
           <button
             type="submit"
-            disabled={loading}
+            disabled={loading || !otpVerified} 
             className={`
                 py-3 rounded-md font-semibold transition-all duration-300
                 touch-manipulation
+
+                ${!otpVerified ? "opacity-50 cursor-not-allowed" : ""}
 
                 ${loading 
                   ? "opacity-60 cursor-not-allowed" 

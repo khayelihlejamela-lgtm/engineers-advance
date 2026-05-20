@@ -27,6 +27,7 @@ export default function Hero() {
               rounded-lg 
               transition-all duration-300 
               hover:bg-[var(--brand-primary)]
+              hover:cursor-pointer
               active:scale-95 active:bg-[var(--brand-primary)]
               focus:ring-2 focus:ring-[var(--brand-secondary)] focus:ring-offset-2
               touch-manipulation"

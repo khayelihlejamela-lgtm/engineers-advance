@@ -12,11 +12,12 @@ export default function ValueProps() {
         <div className="text-center flex flex-col items-center">
           <div className="w-full aspect-[4/3] mb-6 overflow-hidden rounded-lg">
             <Image
-              src="/icons/pathway.jpg"
+              src="/icons/pathways.png"
               alt="Career Pathways"
               width={200}
               height={200}
-              className="w-full h-full object-cover shadow-sm"
+              className="w-full h-full active:scale-95
+            touch-manipulation object-cover shadow-sm"
             />
           </div>
 
@@ -35,7 +36,8 @@ export default function ValueProps() {
               alt="Personalised Support"
               width={200}
               height={200}
-              className="w-full h-full object-cover shadow-sm"
+              className="w-full h-full active:scale-95
+            touch-manipulation object-cover shadow-sm"
             />
           </div>
 
@@ -54,7 +56,8 @@ export default function ValueProps() {
               alt="Industry Insight"
               width={200}
               height={200}
-              className="w-full h-full object-cover shadow-sm"
+              className="w-full h-full active:scale-95
+            touch-manipulation object-cover shadow-sm"
               loading="eager"
             />
           </div>

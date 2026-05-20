@@ -1,8 +1,9 @@
 "use client";
 
 import Link from "next/link";
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import Image from "next/image";
+import MobileDesktopToggle from "../(public)/components/MobileDesktopToggle";
 import Navbar from "../(public)/components/Navbar";   // <-- import your navbar
 import {
   BuildingOfficeIcon,
@@ -25,6 +26,13 @@ export default function PartnerPage() {
   const [loading, setLoading] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [errors, setErrors] = useState({});
+  const [mounted, setMounted] = useState(false);
+
+  const [otpSent, setOtpSent] = useState(false);
+  const [otp, setOtp] = useState("");
+  const [otpVerified, setOtpVerified] = useState(false);
+  const [otpLoading, setOtpLoading] = useState(false);
+  const [otpVerifying, setOtpVerifying] = useState(false);
 
   const orgRef = useRef(null);
   const contactRef = useRef(null);
@@ -32,11 +40,82 @@ export default function PartnerPage() {
   const typeRef = useRef(null);
   const messageRef = useRef(null);
 
+  const scrollToFirstError = (errors) => {
+    const scroll = (ref) => {
+      if (!ref?.current) return;
+      ref.current.scrollIntoView({ behavior: "smooth", block: "center" });
+      setTimeout(() => window.scrollBy(0, -120), 200);
+    };
+
+    if (errors.organisation_name) return scroll(orgRef);
+    if (errors.contact_name) return scroll(contactRef);
+    if (errors.email) return scroll(emailRef);
+    if (errors.partnership_type) return scroll(typeRef);
+    if (errors.message) return scroll(messageRef);
+  };
+
+  useEffect(() => {
+    if (Object.keys(errors).length > 0) {
+      scrollToFirstError(errors);
+    }
+  }, [errors]);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  if (!mounted) return null;
+
+    const sendOtp = async () => {
+    if (!emailRef.current.value.trim()) {
+      setErrors({ email: "Email is required" });
+      return;
+    }
+
+    setOtpLoading(true);
+
+    const res = await fetch("/api/otp/send", {
+      method: "POST",
+      body: JSON.stringify({ email: emailRef.current.value.trim() }),
+    });
+
+    setOtpLoading(false);
+
+    if (res.ok) {
+      setOtpSent(true);
+    }
+  };
+
+    const verifyOtp = async () => {
+    setOtpVerifying(true);
+
+    const res = await fetch("/api/otp/verify", {
+      method: "POST",
+      body: JSON.stringify({
+        email: emailRef.current.value.trim(),
+        code: otp,
+      }),
+    });
+
+    const data = await res.json();
+    setOtpVerifying(false);
+
+    if (data.verified) {
+      setOtpVerified(true);
+    } else {
+      setErrors({ email: "Invalid or expired code" });
+    }
+  };
+
+
   const hasErrors = Object.keys(errors).length > 0;
 
  const handleSubmit = async (e) => {
   e.preventDefault();
-  setLoading(true);
+  if (!otpVerified) {
+      setErrors({ email: "Please verify your email first" });
+      return;
+    }
 
   const form = e.target;
   const organisation_name = form.organisation_name.value.trim();
@@ -54,24 +133,13 @@ export default function PartnerPage() {
   if (!message) newErrors.message = "Message is required";
 
   setErrors(newErrors);
-  
-    // Scroll to first error
-  if (Object.keys(newErrors).length > 0) {
-    if (newErrors.organisation_name) orgRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
-    else if (newErrors.contact_name) contactRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
-    else if (newErrors.email) emailRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
-    else if (newErrors.partnership_type) typeRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
-    else if (newErrors.message) messageRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
-
-    setLoading(false);
-    return;
-  }
 
 
   if (Object.keys(newErrors).length > 0) {
-    setLoading(false);
     return;
   }
+
+  setLoading(true);
 
   const formData = new FormData(form);
 
@@ -87,15 +155,15 @@ export default function PartnerPage() {
     }),
   });
 
-  if (res.ok) {
-    setSubmitted(true);
     setLoading(false);
-    form.reset();
-    return;
-  }
 
-  setLoading(false);
-};
+    if (res.status === 409) {
+      setErrors({ email: "This email has already been registered" });
+      return;
+    }
+
+    setSubmitted(true);
+  };
 
   return (
     <>
@@ -104,7 +172,7 @@ export default function PartnerPage() {
 
       {/* HERO */}
       <section className="pt-28 pb-16 px-6 bg-white text-center">
-        <h1 className="text-4xl text-[var(--brand-primary)] font-bold mb-4">Empowering the next generation of engineers - and the industries that rely on them!</h1>
+        <h1 className="text-4xl text-[var(--brand-primary)] max-w-5xl mx-auto font-bold mb-4">Empowering the next generation of engineers - and the industries that rely on them!</h1>
         <p className="text-gray-600 text-lg max-w-2xl mx-auto">
           Engineers Advance bridges the gap between emerging engineers and the organisations that need them.
           We provide structured pathways, practical guidance, and industry‑aligned support that helps engineers grow - and helps partners build reliable talent pipelines.
@@ -118,7 +186,7 @@ export default function PartnerPage() {
             bg-[var(--brand-secondary)] text-white 
             rounded-lg 
             transition-all duration-300 
-            hover:bg-[var(--brand-primary)]
+            hover:bg-[var(--brand-primary)] hover:cursor-pointer
             active:scale-95 active:bg-[var(--brand-primary)]
             focus:ring-2 focus:ring-[var(--brand-secondary)] focus:ring-offset-2
             touch-manipulation"
@@ -152,7 +220,8 @@ export default function PartnerPage() {
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-10 max-w-6xl mx-auto">
 
           {/* ITEM */}
-          <div className="group flex flex-col items-center text-center p-6 rounded-xl transition-all duration-300 hover:bg-gray-50 hover:shadow-md hover:-translate-y-1">
+          <div className="group flex flex-col active:scale-95
+            touch-manipulation items-center text-center p-6 rounded-xl transition-all duration-300 hover:bg-gray-50 hover:shadow-md hover:-translate-y-1">
             <div className="h-20 w-20 flex items-center justify-center rounded-full border-2 border-[var(--brand-secondary)] mb-4 transition-all duration-300 group-hover:bg-[var(--brand-secondary)]">
               <UsersIcon className="h-10 w-10 text-[var(--brand-secondary)] group-hover:text-white transition-all duration-300" />
             </div>
@@ -162,7 +231,8 @@ export default function PartnerPage() {
             </p>
           </div>
 
-          <div className="group flex flex-col items-center text-center p-6 rounded-xl transition-all duration-300 hover:bg-gray-50 hover:shadow-md hover:-translate-y-1">
+          <div className="group flex flex-col active:scale-95
+            touch-manipulation items-center text-center p-6 rounded-xl transition-all duration-300 hover:bg-gray-50 hover:shadow-md hover:-translate-y-1">
             <div className="h-20 w-20 flex items-center justify-center rounded-full border-2 border-[var(--brand-secondary)] mb-4 transition-all duration-300 group-hover:bg-[var(--brand-secondary)]">
               <ChartBarIcon className="h-10 w-10 text-[var(--brand-secondary)] group-hover:text-white transition-all duration-300" />
             </div>
@@ -172,7 +242,8 @@ export default function PartnerPage() {
             </p>
           </div>
 
-          <div className="group flex flex-col items-center text-center p-6 rounded-xl transition-all duration-300 hover:bg-gray-50 hover:shadow-md hover:-translate-y-1">
+          <div className="group flex flex-col active:scale-95
+            touch-manipulation items-center text-center p-6 rounded-xl transition-all duration-300 hover:bg-gray-50 hover:shadow-md hover:-translate-y-1">
             <div className="h-20 w-20 flex items-center justify-center rounded-full border-2 border-[var(--brand-secondary)] mb-4 transition-all duration-300 group-hover:bg-[var(--brand-secondary)]">
               <UsersIcon className="h-10 w-10 text-[var(--brand-secondary)] group-hover:text-white transition-all duration-300" />
             </div>
@@ -182,7 +253,8 @@ export default function PartnerPage() {
             </p>
           </div>
 
-          <div className="group flex flex-col items-center text-center p-6 rounded-xl transition-all duration-300 hover:bg-gray-50 hover:shadow-md hover:-translate-y-1">
+          <div className="group flex flex-col active:scale-95
+            touch-manipulation items-center text-center p-6 rounded-xl transition-all duration-300 hover:bg-gray-50 hover:shadow-md hover:-translate-y-1">
             <div className="h-20 w-20 flex items-center justify-center rounded-full border-2 border-[var(--brand-secondary)] mb-4 transition-all duration-300 group-hover:bg-[var(--brand-secondary)]">
               <ShieldCheckIcon className="h-10 w-10 text-[var(--brand-secondary)] group-hover:text-white transition-all duration-300" />
             </div>
@@ -468,15 +540,15 @@ export default function PartnerPage() {
                 )}
               </div>
 
-              <div ref={emailRef}>
+              <div>
                 <label className="block mb-2 font-semibold text-gray-800">Email Address</label>
+
                 <input
+                  ref={emailRef}
                   type="email"
                   name="email"
                   className={`w-full p-3 rounded-md border ${
-                    errors.email
-                      ? "border-red-500"
-                      : "border-[var(--brand-secondary)]/40"
+                    errors.email ? "border-red-500" : "border-[var(--brand-secondary)]/40"
                   } bg-white text-gray-800 
                   focus:outline-none focus:ring-2 focus:ring-[var(--brand-secondary)] 
                   transition-all duration-300`}
@@ -484,6 +556,41 @@ export default function PartnerPage() {
                 />
                 {errors.email && (
                   <p className="text-red-500 text-sm mt-1">{errors.email}</p>
+                )}
+
+                {!otpSent && (
+                  <button
+                    type="button"
+                    onClick={sendOtp}
+                    className="mt-3 px-4 py-2 bg-[var(--brand-secondary)] text-white rounded-md hover:cursor-pointer hover:bg-[var(--brand-primary)] active:scale-95 active:bg-[var(--brand-primary)] transition-all duration-300"
+                  >
+                    {otpLoading ? "Sending..." : "Send Verification Code"}
+                  </button>
+                )}
+
+                {otpSent && !otpVerified && (
+                  <div className="mt-4">
+                    <input
+                      type="text"
+                      maxLength={6}
+                      value={otp}
+                      onChange={(e) => setOtp(e.target.value)}
+                      className="w-full p-3 rounded-md border border-[var(--brand-secondary)]/40 text-center tracking-widest hover:cursor-pointer"
+                      placeholder="Enter 6‑digit code"
+                    />
+
+                    <button
+                      type="button"
+                      onClick={verifyOtp}
+                      className="mt-3 px-4 py-2 bg-[var(--brand-secondary)] text-white rounded-md hover:cursor-pointer hover:bg-[var(--brand-primary)] active:scale-95 active:bg-[var(--brand-primary)] transition-all duration-300"
+                    >
+                      {otpVerifying ? "Verifying..." : "Verify Code"}
+                    </button>
+                  </div>
+                )}
+
+                {otpVerified && (
+                  <p className="text-green-600 font-semibold mt-2">Email verified ✓</p>
                 )}
               </div>
 
@@ -530,20 +637,23 @@ export default function PartnerPage() {
 
               <button
                 type="submit"
-                disabled={loading}
+                disabled={loading || !otpVerified}
                 className={`
-                    py-3 rounded-md font-semibold transition-all duration-300
-                    touch-manipulation
+                  py-3 rounded-md font-semibold transition-all duration-300
+                  touch-manipulation
 
-                    ${loading 
-                      ? "opacity-60 cursor-not-allowed" 
-                      : "hover:bg-[var(--brand-primary)] active:scale-95 active:bg-[var(--brand-primary)]"
-                    }
+                  ${!otpVerified ? "opacity-50 cursor-not-allowed" : ""}
 
-                    ${hasErrors 
-                      ? "border-2 border-red-500 bg-white text-red-600 animate-[shake_0.2s_ease-in-out]" 
-                      : "bg-[var(--brand-secondary)] text-white"
-                    }`}
+                  ${loading 
+                    ? "opacity-60 cursor-not-allowed" 
+                    : "hover:bg-[var(--brand-primary)] active:scale-95 active:bg-[var(--brand-primary)]"
+                  }
+
+                  ${hasErrors 
+                    ? "border-2 border-red-500 bg-white text-red-600 animate-[shake_0.2s_ease-in-out]" 
+                    : "bg-[var(--brand-secondary)] text-white"
+                  }
+                `}
               >
                 {loading ? "Submitting..." : "Become a Partner"}
               </button>
@@ -559,7 +669,9 @@ export default function PartnerPage() {
         <img
           src="/logo1.png"
           alt="Engineers Advance Logo"
-          className="h-10 mb-2 w-auto mx-auto"
+          href="/"
+          className="h-10 active:scale-95
+            touch-manipulation mb-2 w-auto mx-auto"
         />
         
         <p className="text-sm">
@@ -581,6 +693,9 @@ export default function PartnerPage() {
           Home
         </a>
       </p>
+
+        {/* Mobile/Desktop Toggle */}
+        <MobileDesktopToggle />
 
         {/* Copyright */}
         <p className="text-xs mt-2 text-gray-200/70">

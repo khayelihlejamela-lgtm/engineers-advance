@@ -1,5 +1,7 @@
 import "./globals.css";
 import Navbar from "./(public)/components/Navbar";
+import DesktopModeLoader from "./(public)/components/DesktopModeLoader";
+
 
 export default function RootLayout({ children }) {
   return (
@@ -10,22 +12,10 @@ export default function RootLayout({ children }) {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <meta name="theme-color" content="#ffffff" />
         <link rel="icon" type="image/png" href="/favicon1.png" />
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `
-              const ua = navigator.userAgent;
-              const isMobile = /iPhone|Android|Mobile|iPad/.test(ua);
-              const isDesktopMode = isMobile && /Macintosh|Windows/.test(ua);
-
-              if (isDesktopMode) {
-                document.documentElement.classList.add("force-desktop");
-              }
-            `,
-          }}
-        />
       </head>
       <body>
         <Navbar />
+        <DesktopModeLoader />
         {children}
       </body>
     </html>
