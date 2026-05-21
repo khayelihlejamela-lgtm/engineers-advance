@@ -14,9 +14,9 @@ export default function About() {
         <div className="p-8">
           <p className="text-gray-700 text-lg md:text-xl leading-relaxed">
             This is a UK‑based career development platform built
-              to support engineers at every stage of their professional journey.
+              to support migrant engineers at every stage of their professional journey.
               We provide structured pathways, personalised mentorship, and
-              practical tools that help internationally trained and UK‑trained
+              practical tools that help both internationally and UK trained migrant
               engineers navigate the complexities of the UK engineering
               landscape.
           </p>
