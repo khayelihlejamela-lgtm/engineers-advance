@@ -31,6 +31,14 @@ export default function About() {
         </p>
 
         <p className="text-gray-600 text-lg md:text-xl leading-relaxed max-w-3xl mx-auto">
+          Engineers Advance does not deliver training directly. Instead, we partner with
+          accredited external training providers and align our development pathways with
+          recognised professional institutions. This ensures every engineer receives
+          high‑quality, industry‑aligned support while we focus on guidance, clarity and
+          career progression.
+        </p>
+
+        <p className="text-gray-600 text-lg md:text-xl leading-relaxed max-w-3xl mx-auto">
           We combine industry insights, one‑to‑one guidance, and a growing
           community of professionals to ensure every engineer has the clarity
           and support they need to progress with confidence. Whether you’re

@@ -349,6 +349,23 @@ export default function CTASection() {
         </form>
 
       </div>
+
+      <div className="mt-8 flex justify-center gap-6 text-sm text-gray-500">
+        <a
+          href="/terms"
+          className="hover:text-[var(--brand-secondary)] hover:underline transition-colors"
+        >
+          Terms & Conditions
+        </a>
+        <span className="text-gray-400">•</span>
+        <a
+          href="/privacy"
+          className="hover:text-[var(--brand-secondary)] hover:underline transition-colors"
+        >
+          Privacy Policy
+        </a>
+      </div>
+
     </section>
   );
 }
