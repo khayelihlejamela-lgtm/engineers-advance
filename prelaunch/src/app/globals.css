@@ -1,0 +1,228 @@
+@import "tailwindcss";
+@tailwind utilities;
+
+/* ============================================================
+   DESIGN TOKENS
+============================================================ */
+
+:root {
+  --navbar-height: 80px;
+
+  --background: #ffffff;
+  --foreground: #111827;
+
+  --brand-primary: #0A2A43;
+  --brand-secondary: rgb(0, 167, 181);
+
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+/* ============================================================
+   BASE
+============================================================ */
+
+html {
+  min-width: 0;
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+body {
+  min-width: 0;
+  min-height: 100dvh;
+  margin: 0;
+  overflow-x: hidden;
+
+  background: var(--background);
+  color: var(--foreground);
+
+  font-family: Arial, Helvetica, sans-serif;
+
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/*
+ * Prevent media and replaced elements from forcing a page wider
+ * than the viewport.
+ */
+img,
+svg,
+video,
+canvas,
+iframe {
+  max-width: 100%;
+}
+
+/* ============================================================
+   TOUCH + INTERACTION
+============================================================ */
+
+button,
+a,
+input,
+select,
+textarea,
+[role="button"] {
+  -webkit-tap-highlight-color: transparent;
+}
+
+button,
+a,
+[role="button"] {
+  touch-action: manipulation;
+}
+
+/*
+ * Keep form controls large enough to avoid awkward mobile zoom
+ * and improve touchscreen usability.
+ */
+input,
+select,
+textarea {
+  font-size: 16px;
+}
+
+/*
+ * Do not remove focus indication. This provides a consistent
+ * keyboard-visible fallback even where a component does not
+ * define its own ring.
+ */
+:focus-visible {
+  outline: 2px solid var(--brand-secondary);
+  outline-offset: 2px;
+}
+
+/* ============================================================
+   HOVER EFFECTS
+   Only apply decorative hover effects on devices that actually
+   support hover. Touch users should never depend on these.
+============================================================ */
+
+@media (hover: hover) and (pointer: fine) {
+  .text-glow:hover {
+    text-shadow: 0 0 6px rgba(0, 0, 0, 0.25);
+  }
+
+  .logo-glow:hover {
+    filter: drop-shadow(0 0 8px #2de4f5);
+  }
+}
+
+/*
+ * Native <option> hover styling is inconsistent between browsers,
+ * especially on mobile/touch devices, so no interaction depends on it.
+ */
+
+/* ============================================================
+   ANIMATIONS
+============================================================ */
+
+@keyframes shake {
+  0% {
+    transform: translateX(0);
+  }
+
+  25% {
+    transform: translateX(-3px);
+  }
+
+  50% {
+    transform: translateX(3px);
+  }
+
+  75% {
+    transform: translateX(-3px);
+  }
+
+  100% {
+    transform: translateX(0);
+  }
+}
+
+/* ============================================================
+   SHARED COMPONENT UTILITIES
+============================================================ */
+
+@layer components {
+  .nav-link {
+    @apply
+      inline-flex
+      min-h-11
+      items-center
+      px-4
+      py-3
+      text-[var(--brand-primary)]
+      transition-all
+      duration-200
+      hover:text-[var(--brand-secondary)]
+      active:scale-[0.98]
+      active:text-[var(--brand-secondary)]
+      focus-visible:ring-2
+      focus-visible:ring-[var(--brand-secondary)]
+      focus-visible:ring-offset-2
+      touch-manipulation;
+  }
+
+  .footer-link {
+    @apply
+      inline-flex
+      min-h-11
+      items-center
+      font-medium
+      transition-all
+      duration-200
+      hover:underline
+      hover:text-[var(--brand-secondary)]
+      active:scale-[0.98]
+      active:text-[var(--brand-secondary)]
+      focus-visible:ring-2
+      focus-visible:ring-[var(--brand-secondary)]
+      focus-visible:ring-offset-2
+      touch-manipulation;
+  }
+}
+
+/* ============================================================
+   REDUCED MOTION
+============================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+  }
+}
+
+/*
+ * IMPORTANT:
+ *
+ * The previous .force-desktop rules intentionally rendered the site
+ * at 1280px and scaled it down. That prevents true responsive layout
+ * and should not be used on touchscreen/mobile pages.
+ *
+ * Removed:
+ *
+ * .force-desktop {
+ *   width: 1280px;
+ *   transform: scale(calc(100vw / 1280));
+ *   transform-origin: top left;
+ * }
+ *
+ * .force-desktop\:block {
+ *   display: block !important;
+ * }
+ */
